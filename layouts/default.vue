@@ -1,11 +1,13 @@
 <template>
-  <v-app dark>
+  <v-app>
     <v-navigation-drawer
       v-model="drawer"
       :mini-variant="miniVariant"
       :clipped="clipped"
       fixed
       app
+      color="#253C59"
+      permanent
     >
       <v-list>
         <v-list-item
@@ -24,24 +26,13 @@
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
-    <v-app-bar :clipped-left="clipped" fixed app>
+    <v-app-bar style="background-color: #253C59" :clipped-left="clipped" fixed app>
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
       <v-btn icon @click.stop="miniVariant = !miniVariant">
         <v-icon>mdi-{{ `chevron-${miniVariant ? 'right' : 'left'}` }}</v-icon>
       </v-btn>
-      <v-btn icon @click.stop="clipped = !clipped">
-        <v-icon>mdi-application</v-icon>
-      </v-btn>
-      <v-btn icon @click.stop="fixed = !fixed">
-        <v-icon>mdi-minus</v-icon>
-      </v-btn>
-      <v-toolbar-title>{{ title }}</v-toolbar-title>
-      <v-spacer />
-      <v-btn icon @click.stop="rightDrawer = !rightDrawer">
-        <v-icon>mdi-menu</v-icon>
-      </v-btn>
     </v-app-bar>
-    <v-main>
+    <v-main style="background-color: #e0dede;">
       <v-container>
         <Nuxt />
       </v-container>
@@ -56,7 +47,7 @@
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
-    <v-footer :absolute="!fixed" app>
+    <v-footer style="background-color: #253C59;" :absolute="!fixed" app>
       <span>&copy; {{ new Date().getFullYear() }}</span>
     </v-footer>
   </v-app>
@@ -72,14 +63,29 @@ export default {
       fixed: false,
       items: [
         {
-          icon: 'mdi-apps',
-          title: 'Welcome',
-          to: '/',
+          icon: 'mdi-book',
+          title: 'Categorias',
+          to: '/Category',
         },
         {
-          icon: 'mdi-chart-bubble',
-          title: 'Inspire',
-          to: '/inspire',
+          icon: 'mdi mdi-cash-fast',
+          title: 'Pagamentos',
+          to: '/Payment',
+        },
+        {
+          icon: 'mdi mdi-account-circle',
+          title: 'Usuários',
+          to: '/User',
+        },
+        {
+          icon: 'mdi mdi-ticket-percent',
+          title: 'Cupons',
+          to: '/Cupom',
+        },
+        {
+          icon: 'mdi mdi-basket',
+          title: 'Produtos',
+          to: '/Product',
         },
       ],
       miniVariant: false,

@@ -6,7 +6,7 @@
       :clipped="clipped"
       fixed
       app
-      color="#253C59"
+      color="#7D5BA6"
       permanent
     >
       <v-list>
@@ -26,13 +26,13 @@
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
-    <v-app-bar style="background-color: #253C59" :clipped-left="clipped" fixed app>
+    <v-app-bar style="background-color: #7D5BA6" :clipped-left="clipped" fixed app>
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
       <v-btn icon @click.stop="miniVariant = !miniVariant">
         <v-icon>mdi-{{ `chevron-${miniVariant ? 'right' : 'left'}` }}</v-icon>
       </v-btn>
     </v-app-bar>
-    <v-main style="background-color: #e0dede;">
+    <v-main style="background-color: #DDDDDD;">
       <v-container>
         <Nuxt />
       </v-container>
@@ -47,7 +47,7 @@
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
-    <v-footer style="background-color: #253C59;" :absolute="!fixed" app>
+    <v-footer style="background-color: #7D5BA6;" :absolute="!fixed" app>
       <span>&copy; {{ new Date().getFullYear() }}</span>
     </v-footer>
   </v-app>
@@ -55,7 +55,7 @@
 
 <script>
 export default {
-  name: 'DefaultLayout',
+  name: 'UserLayout',
   data() {
     return {
       clipped: false,
@@ -63,34 +63,19 @@ export default {
       fixed: false,
       items: [
         {
-          icon: 'mdi-book',
-          title: 'Categorias',
-          to: '/admin/Category',
+          icon: 'mdi mdi-login',
+          title: 'Login',
+          to: '/user/login/login',
         },
         {
-          icon: 'mdi mdi-cash-fast',
-          title: 'Pagamentos',
-          to: '/admin/Payment',
+          icon: 'mdi mdi-home-plus',
+          title: 'User Address',
+          to: '/user/address/UserAddress',
         },
         {
-          icon: 'mdi mdi-account-circle',
-          title: 'Usuários',
-          to: '/admin/User',
-        },
-        {
-          icon: 'mdi mdi-ticket-percent',
-          title: 'Cupons',
-          to: '/admin/Cupom',
-        },
-        {
-          icon: 'mdi mdi-basket',
-          title: 'Produtos',
-          to: '/admin/Product',
-        },
-        {
-          icon: 'mdi mdi-map-marker',
-          title: 'Endereços',
-          to: '/admin/Address',
+          icon: 'mdi mdi-account-edit',
+          title: 'User Data',
+          to: '/user/data/UserData',
         },
       ],
       miniVariant: false,

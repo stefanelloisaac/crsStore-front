@@ -6,7 +6,7 @@
       :clipped="clipped"
       fixed
       app
-      color="#7D5BA6"
+      color="#7c4dff"
       permanent
     >
       <v-list>
@@ -26,13 +26,14 @@
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
-    <v-app-bar style="background-color: #7D5BA6" :clipped-left="clipped" fixed app>
+    <v-app-bar style="background-color: #7c4dff" :clipped-left="clipped" fixed app>
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
       <v-btn icon @click.stop="miniVariant = !miniVariant">
         <v-icon>mdi-{{ `chevron-${miniVariant ? 'right' : 'left'}` }}</v-icon>
       </v-btn>
+      <v-icon style="margin-left: 92%;">mdi mdi-cart-outline</v-icon>
     </v-app-bar>
-    <v-main style="background-color: #DDDDDD;">
+    <v-main style="background-color: #f6f6f6;">
       <v-container>
         <Nuxt />
       </v-container>
@@ -47,7 +48,7 @@
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
-    <v-footer style="background-color: #7D5BA6;" :absolute="!fixed" app>
+    <v-footer style="background-color: #7c4dff;" :absolute="!fixed" app>
       <span>&copy; {{ new Date().getFullYear() }}</span>
     </v-footer>
   </v-app>
@@ -63,19 +64,24 @@ export default {
       fixed: false,
       items: [
         {
-          icon: 'mdi mdi-login',
-          title: 'Login',
-          to: '/user/login/login',
+          icon: 'mdi mdi-format-letter-spacing-variant',
+          title: 'Home',
+          to: '/user/home/Home',
         },
         {
-          icon: 'mdi mdi-home-plus',
-          title: 'User Address',
-          to: '/user/address/UserAddress',
+          icon: 'mdi mdi-login',
+          title: 'Login',
+          to: '/user/login/Login',
         },
         {
           icon: 'mdi mdi-account-edit',
-          title: 'User Data',
-          to: '/user/data/UserData',
+          title: 'Meus Dados',
+          to: '/user/data/PersonalData',
+        },
+        {
+          icon: 'mdi mdi-home-plus',
+          title: 'Meu Endereço',
+          to: '/user/address/PersonalAddress',
         },
       ],
       miniVariant: false,

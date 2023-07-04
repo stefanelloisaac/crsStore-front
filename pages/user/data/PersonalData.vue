@@ -11,7 +11,7 @@
     class="elevation-20 rounded-xl"
   >
     <h1 style="text-align: center; padding-top: 20px">
-      Edite seus dados <span class="mdi mdi-robot-outline"></span>
+      Cadastre seus dados <span class="mdi mdi-robot-outline"></span>
     </h1>
     <v-form style="padding-top: 10px" v-model="valid">
       <v-container>
@@ -164,7 +164,7 @@
 <script>
 export default {
   name: 'Users',
-  layout: 'user',
+  layout: 'UserLayout',
 
   data() {
     return {

@@ -149,7 +149,7 @@
 <script>
 export default {
   name: 'Adress',
-  layout: 'user',
+  layout: 'UserLayout',
 
   data() {
     return {

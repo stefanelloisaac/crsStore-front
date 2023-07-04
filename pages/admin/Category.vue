@@ -21,7 +21,7 @@
     <v-row style="padding-top: 20px" class="d-flex justify-center align-center">
       <v-card
         class="elevation-10"
-        width="900"
+        width="1080"
         style="background-color: #465d6b; color: black"
       >
         <v-card-title style="color: black">
@@ -163,7 +163,7 @@ export default {
     },
     async getAllCategories() {
       try {
-        const response = await this.$api.get('/categories/')
+        const response = await this.$api.get('/categories/get-all-categories')
         this.items = response.data
       } catch (error) {
         return this.$toast.warning('Ocorreu um erro.')

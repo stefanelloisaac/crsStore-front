@@ -13,17 +13,18 @@
               "
             >
               <p>good for health,</p>
-              <p style="margin-top: -20px;">bad for education <span class="mdi mdi-pill-off"></span></p>
-              
+              <p style="margin-top: -20px">
+                bad for education <span class="mdi mdi-pill-off"></span>
+              </p>
             </span>
-  
+
             <strong
               style="
                 font-family: 'Courier New', Courier, monospace;
-                color: #4a148c;
+                color: #7c4dff;
               "
             >
-              AKIRA CO
+              akira's
               <span class="mdi mdi-copyleft"></span>
             </strong>
           </h1>
@@ -72,9 +73,6 @@
                     light
                     placeholder="Senha"
                     color="#00897B"
-                    :append-icon="show ? 'mdi-eye-off' : 'mdi-eye'"
-                    @click:append="toggleShow"
-                    :type="show ? 'text' : 'password'"
                     prepend-inner-icon="mdi-lock"
                   ></v-text-field>
                 </v-col>
@@ -82,16 +80,16 @@
               <v-row>
                 <v-col style="margin-top: -10%">
                   <a
-                    href="/public/login/forget"
+                    href="/user/login/Forget"
                     class=""
-                    style="margin-top: -10%; color: red; margin-left: 10px;"
+                    style="margin-top: -10%; color: red; margin-left: 10px"
                     >Esqueci minha senha</a
                   >
                 </v-col>
               </v-row>
               <v-row>
                 <v-col>
-                  <v-btn x-large block color="#7D5BA6" @click="loginAmem"
+                  <v-btn x-large block color="#7c4dff"
                     >Entrar</v-btn
                   >
                 </v-col>
@@ -109,7 +107,7 @@
                   >
                     Não tem uma conta?
                     <strong>
-                      <a style="color: red" href="/public/login/register"
+                      <a style="color: red" href="/user/data/PersonalData"
                         >Registre-se</a
                       >
                     </strong>
@@ -127,7 +125,7 @@
 <script>
 export default {
   name: 'Users',
-  layout: 'user',
+  layout: 'UserLayout',
 
   data() {
     return {

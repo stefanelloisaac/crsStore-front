@@ -31,7 +31,10 @@
       <v-btn icon @click.stop="miniVariant = !miniVariant">
         <v-icon>mdi-{{ `chevron-${miniVariant ? 'right' : 'left'}` }}</v-icon>
       </v-btn>
-      <v-icon style="margin-left: 92%;">mdi mdi-cart-outline</v-icon>
+      <v-btn icon href="http://localhost:3000/admin/Category">
+        <v-icon>mdi mdi-shield-crown-outline</v-icon>
+      </v-btn>
+      <v-icon style="margin-left: 89%;">mdi mdi-cart-outline</v-icon>
     </v-app-bar>
     <v-main style="background-color: #f6f6f6;">
       <v-container>

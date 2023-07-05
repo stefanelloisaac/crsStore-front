@@ -31,6 +31,9 @@
       <v-btn icon @click.stop="miniVariant = !miniVariant">
         <v-icon>mdi-{{ `chevron-${miniVariant ? 'right' : 'left'}` }}</v-icon>
       </v-btn>
+      <v-btn icon href="http://localhost:3000/user/home/Home">
+        <v-icon>mdi mdi-shield-crown-outline</v-icon>
+      </v-btn>
     </v-app-bar>
     <v-main style="background-color: #e0dede;">
       <v-container>

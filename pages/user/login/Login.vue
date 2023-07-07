@@ -46,7 +46,7 @@
               <v-row>
                 <v-col>
                   <v-text-field
-                    v-model="users.username"
+                    v-model="login.username"
                     class="text-input-blue"
                     label="Username"
                     placeholder="Username"
@@ -56,7 +56,7 @@
                     required
                     light
                     color="#00897B"
-                    prepend-inner-icon="mdi-email"
+                    prepend-inner-icon="mdi-email-outline"
                   ></v-text-field>
                 </v-col>
               </v-row>
@@ -65,15 +65,18 @@
                   <v-text-field
                     class="text-input-blue"
                     label="Senha"
-                    v-model="users.passwordHash"
+                    v-model="login.password"
                     style="margin-top: -8%"
                     filled
                     rounded
                     dense
+                    :append-icon="show ? 'mdi-eye-off' : 'mdi-eye'"
+                    @click:append="toggleShow"
+                    :type="show ? 'text' : 'password'"
                     light
                     placeholder="Senha"
                     color="#00897B"
-                    prepend-inner-icon="mdi-lock"
+                    prepend-inner-icon="mdi-lock-outline"
                   ></v-text-field>
                 </v-col>
               </v-row>
@@ -82,19 +85,19 @@
                   <a
                     href="/user/login/Forget"
                     class=""
-                    style="margin-top: -10%; color: red; margin-left: 10px"
+                    style="margin-top: -5%; color: red; margin-left: 12vw; font-size: 14px;"
                     >Esqueci minha senha</a
                   >
                 </v-col>
               </v-row>
               <v-row>
                 <v-col>
-                  <v-btn x-large block color="#7c4dff"
+                  <v-btn x-large block color="#7c4dff" style="font-weight: bold;" @click="efetuarLogin"
                     >Entrar</v-btn
                   >
                 </v-col>
               </v-row>
-              <v-row>
+              <v-row style="margin-top: 10%">
                 <v-col>
                   <p
                     style="
@@ -107,12 +110,39 @@
                   >
                     Não tem uma conta?
                     <strong>
-                      <a style="color: red" href="/user/data/PersonalData"
+                      <a style="color: #6200EA; font-weight: bolder;" href="/user/data/PersonalData"
                         >Registre-se</a
                       >
                     </strong>
                   </p>
                 </v-col>
+              </v-row>
+              <v-row class="d-flex justify-center align-center" style="margin-top: 10%;">
+                <v-spacer></v-spacer>
+                <v-btn outlined color="green accent-1">
+                  <v-icon color="blue darken-4">
+                    mdi-facebook
+                  </v-icon>
+                </v-btn>
+                <v-spacer></v-spacer>
+                <v-btn outlined color="green accent-1">
+                  <v-icon color="pink accent-4">
+                    mdi-instagram
+                  </v-icon>
+                </v-btn>
+                <v-spacer></v-spacer>
+                <v-btn outlined color="green accent-1">
+                  <v-icon color="blue">
+                    mdi-twitter
+                  </v-icon>
+                </v-btn>
+                <v-spacer></v-spacer>
+                <v-btn href="https://github.com/stefanelloisaac" outlined color="green accent-1">
+                  <v-icon color="black">
+                    mdi-github
+                  </v-icon>
+                </v-btn>
+                <v-spacer></v-spacer>
               </v-row>
             </v-container>
           </v-container>
@@ -130,19 +160,39 @@ export default {
   data() {
     return {
       valid: false,
-      users: {
-        id: null,
+      show:false,
+      login:{
         username: null,
-        cpf: null,
-        passwordHash: null,
-        role: null,
-        name: null,
-        phone: null,
-        email: null,
+        password: null
       },
-      rule: [(v) => !!v || 'Esse campo é obrigatório'],
+      rule:{
+        must: v => !!v || 'Esse campo é obrigatorio',}
     }
   },
+
+  methods: {
+    async efetuarLogin(){
+      const log ={
+        username: this.login.username,
+        password: this.login.password
+      }
+      try {
+        const response = await this.$api.post('/users/login', log)
+        if(response.type === "success"){
+          localStorage.setItem("crsStore-api-token", response.data.token)
+          this.$toast.success("Você está logado!")
+          this.$router.push("/")
+        }else{
+          this.$toast.error(response.data.message)
+        }
+      } catch (error) {
+        this.$toast.error('Ocorreu um erro ao realizar o login!');
+      }
+    },
+    toggleShow(){
+      this.show = !this.show
+    },
+  }
 }
 </script>
 

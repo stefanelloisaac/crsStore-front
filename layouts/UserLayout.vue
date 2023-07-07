@@ -31,26 +31,32 @@
       <v-btn icon @click.stop="miniVariant = !miniVariant">
         <v-icon>mdi-{{ `chevron-${miniVariant ? 'right' : 'left'}` }}</v-icon>
       </v-btn>
-      <v-btn icon href="http://localhost:3000/admin/Category">
-        <v-icon>mdi mdi-shield-crown-outline</v-icon>
+      <v-btn outlined style="color:white" href="/admin/Category">
+        <v-icon color="#f6f6f6">{{"mdi mdi-shield-crown-outline"}}</v-icon>
       </v-btn>
-      <v-icon style="margin-left: 89%;">mdi mdi-cart-outline</v-icon>
+      <v-spacer></v-spacer>
+      <v-btn
+        outlined
+        color="#f6f6f6"
+        style="margin-right: 1%;"
+        to="/user/login/Login"
+      >
+        Login
+      </v-btn>
+      <v-btn
+        outlined
+        color="white"
+      >
+      <v-icon style="color:#f6f6f6" >
+        {{ "mdi-cart" }}
+      </v-icon>
+      </v-btn> 
     </v-app-bar>
     <v-main style="background-color: #f6f6f6;">
       <v-container>
         <Nuxt />
       </v-container>
     </v-main>
-    <v-navigation-drawer v-model="rightDrawer" :right="right" temporary fixed>
-      <v-list>
-        <v-list-item @click.native="right = !right">
-          <v-list-item-action>
-            <v-icon light> mdi-repeat </v-icon>
-          </v-list-item-action>
-          <v-list-item-title>Switch drawer (click me)</v-list-item-title>
-        </v-list-item>
-      </v-list>
-    </v-navigation-drawer>
     <v-footer style="background-color: #7c4dff;" :absolute="!fixed" app>
       <span>&copy; {{ new Date().getFullYear() }}</span>
     </v-footer>
@@ -79,12 +85,12 @@ export default {
         {
           icon: 'mdi mdi-account-edit',
           title: 'Meus Dados',
-          to: '/user/data/PersonalData',
+          to: '/user/data/ShowUserData',
         },
         {
           icon: 'mdi mdi-home-plus',
           title: 'Meu Endereço',
-          to: '/user/address/PersonalAddress',
+          to: '/user/address/ShowUserAddress',
         },
       ],
       miniVariant: false,

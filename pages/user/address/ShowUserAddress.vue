@@ -12,14 +12,14 @@
     class="elevation-20 rounded-xl"
   >
     <h1 style="text-align: center; padding-top: 3vh">
-      Cadastre seu endereço <span class="mdi mdi-emoticon-poop-outline"></span>
+      Meu endereço <span class="mdi mdi-emoticon-poop-outline"></span>
     </h1>
     <v-form style="padding-top: 4vh" v-model="valid">
       <v-container>
         <v-row class="d-flex justify-center alignt-center">
           <v-col cols="3">
             <v-text-field
-              v-model="zipCode"
+              v-model="data.zipCode"
               class="text-input-blue"
               light
               placeholder="CEP"
@@ -28,15 +28,15 @@
               v-mask="['#####-###']"
               filled
               rounded
+              disabled
               prepend-icon="mdi-city-variant-outline"
               dense
               background-color="#B9F6CA"
-              :rules="[rule.must]"
             />
           </v-col>
           <v-col cols="5">
             <v-text-field
-              v-model="adress.city"
+              v-model="data.city"
               class="text-input-blue"
               placeholder="Cidade"
               color="#00897B"
@@ -44,14 +44,14 @@
               filled
               rounded
               light
+              disabled
               dense
               background-color="#B9F6CA"
-              :rules="[rule.must]"
             />
           </v-col>
           <v-col cols="2">
             <v-text-field
-              v-model="adress.state"
+              v-model="data.state"
               class="text-input-blue"
               placeholder="Estado"
               color="#00897B"
@@ -59,9 +59,9 @@
               filled
               light
               rounded
+              disabled
               dense
               background-color="#B9F6CA"
-              :rules="[rule.must]"
             />
           </v-col>
         </v-row>
@@ -69,7 +69,7 @@
           <v-col cols="5">
             <v-text-field
               class="text-input-blue"
-              v-model="adress.street"
+              v-model="data.street"
               placeholder="Logradouro"
               color="#00897B"
               label="Logradouro"
@@ -78,38 +78,38 @@
               prepend-icon="mdi-map-marker-outline"
               light
               dense
+              disabled
               background-color="#B9F6CA"
-              :rules="[rule.must]"
             />
           </v-col>
           <v-col cols="2">
             <v-text-field
-              v-model="adress.numberForget"
+              v-model="data.numberForget"
               class="text-input-blue"
               placeholder="Número"
               color="#00897B"
               label="Número"
               filled
               rounded
+              disabled
               light
               dense
               background-color="#B9F6CA"
-              :rules="[rule.must]"
             />
           </v-col>
           <v-col cols="3">
             <v-text-field
               class="text-input-blue"
-              v-model="adress.district"
+              v-model="data.district"
               placeholder="Bairro"
               color="#00897B"
               label="Bairro"
               background-color="#B9F6CA"
               filled
               rounded
+              disabled
               light
               dense
-              :rules="[rule.must]"
             />
           </v-col>
         </v-row>
@@ -119,20 +119,14 @@
       class="d-flex justify-center align-center"
       style="padding-bottom: 15px; margin-top: 2vh"
     >
-      <v-btn
-        light
-        x-large
-        style="margin-right: 2%"
-        @click="persistir"
-        color="#FFECB3"
-      >
-        Registrar
+      <v-btn light x-large style="margin-right: 2%" color="#FFECB3">
+        Editar
       </v-btn>
       <v-btn
         light
         x-large
         style="margin-left: 2%"
-        to="../../user/home/Home"
+        to="/public/user/adress"
         color="#EF9A9A"
       >
         Cancelar
@@ -148,83 +142,23 @@ export default {
 
   data() {
     return {
-      valid: false,
-      zipCode: null,
-      adress: {
-        id: null,
-        city: null,
-        state: null,
-        idUser: null,
-        district: null,
-        numberForget: null,
-        street: null,
-      },
-      response: null,
-      baseURL: `https://viacep.com.br/ws/`,
-      rule: { must: v => !!v || 'Esse campo é obrigatorio'}
+      valid: null,
+      data: [],
     }
   },
 
-  watch: {
-    async zipCode(novoCep) {
-      if (novoCep.length === 9) {
-        await this.getCep()
-      } else {
-        this.response = null
-      }
-    },
-  },
-
-  created() {
-    if (this.$route?.params?.id) {
-      this.getById(this.$route.params.id)
-    }
+  async created() {
+    await this.getAdress()
   },
 
   methods: {
-    async getCep() {
-      const url = `${this.baseURL}${this.zipCode}/json/`
-      await this.$axios.get(url).then((resp) => {
-        const data = resp.data
-        if (!data.erro) {
-          this.adress.city = data.localidade
-          this.adress.district = data.bairro
-          this.adress.state = data.uf
-          this.adress.street = data.logradouro
-        } else {
-          this.$toast.error('CEP não encontrado!')
-        }
-      })
-    },
-
-    async persistir() {
+    async getAdress() {
       try {
-        const adress = {
-          city: this.adress.city,
-          state: this.adress.state,
-          zipCode: this.zipCode,
-          district: this.adress.district,
-          numberForget: this.adress.numberForget,
-          street: this.adress.street,
-        }
-
-        if (!this.adress.id) {
-          await this.$api.$post('/address', adress)
-          this.$router.push('/user/home/Home')
-          return this.$toast.success(`Endereço cadastrado com sucesso!`)
-        }
-
-        await this.$api.$post(`/address/${this.adress.id}`, adress)
-        this.$router.push('/user/home/Home')
-        this.$toast.success('Cadastro atualizado com sucesso!')
+        const response = await this.$api.get('/address/getAll')
+        this.data = response.data[0]
       } catch (error) {
-        this.$toast.error('Ocorreu um erro ao realizar o cadastro!')
+        return this.$toast.warning('Ocorreu um erro.')
       }
-    },
-    async getById(id) {
-      const adress = await this.$api.$get(`/address/${id}`)
-      this.adress = adress.data
-      this.zipCode = adress.zipCode
     },
   },
 }

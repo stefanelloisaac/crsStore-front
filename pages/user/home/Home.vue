@@ -100,6 +100,7 @@ export default {
   async created() {
     await this.getAllProducts()
   },
+  
   methods: {
     async getAllProducts() {
       try {

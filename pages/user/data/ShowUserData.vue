@@ -12,7 +12,7 @@
     class="elevation-20 rounded-xl"
   >
     <h1 style="text-align: center; padding-top: 3vh">
-      Cadastre seus dados <span class="mdi mdi-robot-outline"></span>
+      Meus dados <span class="mdi mdi-robot-outline"></span>
     </h1>
     <v-form style="padding-top: 4vh" v-model="valid">
       <v-container>
@@ -179,7 +179,7 @@
         light
         x-large
         style="margin-left: 2%"
-        to="../../user/home/Home"
+        to="/public/user/users"
         color="#EF9A9A"
       >
         Cancelar
@@ -230,20 +230,19 @@ export default {
           cpf: this.users.cpf,
           name: this.users.name,
           phone: this.users.phone,
-          password: this.users.password,
+          passwordHash: this.users.passwordHash,
           role: this.users.role,
           email: this.users.email,
         }
 
         if (!this.users.id) {
           await this.$api.$post('/users', users)
-          this.$router.push('/user/address/PersonalAddress')
-          return this.$toast.success(`Dados cadastrados com sucesso!`)
+          this.$router.push('/public/user/users')
+          return this.$toast.success(`Endereço cadastrado com sucesso!`)
         }
 
-        await this.$api.$post(`/users/${this.users.id}`, users).token
-        // localStorage.setItem('crsStore-api-token', token)
-        this.$router.push('/user/address/PersonalAddress')
+        await this.$api.$post(`/users/${this.users.id}`, users)
+        this.$router.push('/public/user/users')
         this.$toast.success('Cadastro atualizado com sucesso!')
       } catch (error) {
         this.$toast.error('Ocorreu um erro ao realizar o cadastro!')

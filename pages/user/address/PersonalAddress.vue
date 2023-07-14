@@ -161,7 +161,7 @@ export default {
       },
       response: null,
       baseURL: `https://viacep.com.br/ws/`,
-      rule: { must: v => !!v || 'Esse campo é obrigatorio'}
+      rule: { must: (v) => !!v || 'Esse campo é obrigatorio' },
     }
   },
 
@@ -211,6 +211,7 @@ export default {
         if (!this.adress.id) {
           await this.$api.$post('/address', adress)
           this.$router.push('/user/home/Home')
+          location.reload()
           return this.$toast.success(`Endereço cadastrado com sucesso!`)
         }
 

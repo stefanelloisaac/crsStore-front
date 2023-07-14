@@ -208,11 +208,14 @@ export default {
         password: null,
         password2: null,
       },
-      rule:{
-        password: v => !!v || 'Esse campo é obrigatorio',
-        equalPassword: v => v === this.users.password || 'Senha diferente!'
+      rule: {
+        password: (v) => !!v || 'Esse campo é obrigatorio',
+        equalPassword: (v) => v === this.users.password || 'Senha diferente!',
       },
-      roles: [{"name": "Cliente", "value": "customer"}, {"name": "Entregador", "value": "deliver"}]
+      roles: [
+        { name: 'Cliente', value: 'customer' },
+        { name: 'Entregador', value: 'deliver' },
+      ],
     }
   },
 
@@ -236,21 +239,21 @@ export default {
         }
 
         if (!this.users.id) {
-          await this.$api.$post('/users', users)
-          this.$router.push('/user/address/PersonalAddress')
+          await this.$api.post('/users', users)
+          this.$router.push('/user/login/Login')
           return this.$toast.success(`Dados cadastrados com sucesso!`)
         }
 
-        await this.$api.$post(`/users/${this.users.id}`, users).token
+        await this.$api.patch(`/users/${this.users.id}`, users).token
         // localStorage.setItem('crsStore-api-token', token)
-        this.$router.push('/user/address/PersonalAddress')
+        this.$router.push('/user/login/Login')
         this.$toast.success('Cadastro atualizado com sucesso!')
       } catch (error) {
         this.$toast.error('Ocorreu um erro ao realizar o cadastro!')
       }
     },
     async getById(id) {
-      const users = await this.$api.$get(`/users/${id}`)
+      const users = await this.$api.get(`/users/${id}`)
       this.users = users.data
     },
   },

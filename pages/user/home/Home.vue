@@ -69,7 +69,7 @@
                     {{ product.description }}
                   </v-card-subtitle>
                   <v-card-actions class="d-flex justify-center align-center">
-                    <v-btn light color="green accent-3" variant="text">
+                    <v-btn light color="green accent-3" variant="text" @click="addtoCart(product)">
                       Add to cart <span class="mdi mdi-cart-plus"></span>
                     </v-btn>
                   </v-card-actions>
@@ -95,6 +95,7 @@ export default {
   data: () => ({
     model: null,
     categories: [],
+    users: []
   }),
 
   async created() {
@@ -110,7 +111,19 @@ export default {
         return this.$toast.warning('Ocorreu um erro.')
       }
     },
+
+    async addtoCart(item) {
+      try {
+        const response = await this.$api.post('/users/addtoCart', item)
+        this.users = response.data
+        return this.$toast.success('Produto adicionado ao carrinho!')
+      } catch (error) {
+        return this.$toast.warning('Ocorreu um erro.')
+      }
+    }
   },
+
+
 }
 </script>
 

@@ -24,40 +24,80 @@
             <v-list-item-title>{{ item.title }}</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
+        <v-list-item v-if="data.token != null" to="/user/data/ShowUserData">
+          <v-list-item-action>
+            <v-icon>{{ 'mdi mdi-account-edit' }}</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title>Meus dados</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+        <v-list-item v-if="data.token != null" to="/user/address/ShowUserAddress">
+          <v-list-item-action>
+            <v-icon>{{ 'mdi mdi-home-plus' }}</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title>Meu endereço</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+        <v-list-item v-if="data.token != null" @click="logout">
+          <v-list-item-action>
+            <v-icon>{{ 'mdi mdi-logout-variant' }}</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title>Logout</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
       </v-list>
     </v-navigation-drawer>
-    <v-app-bar style="background-color: #7c4dff" :clipped-left="clipped" fixed app>
+    <v-app-bar
+      style="background-color: #7c4dff"
+      :clipped-left="clipped"
+      fixed
+      app
+    >
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
       <v-btn icon @click.stop="miniVariant = !miniVariant">
         <v-icon>mdi-{{ `chevron-${miniVariant ? 'right' : 'left'}` }}</v-icon>
       </v-btn>
-      <v-btn outlined style="color:white" href="/admin/Category">
-        <v-icon color="#f6f6f6">{{"mdi mdi-shield-crown-outline"}}</v-icon>
+      <v-btn
+        v-if="data.role === 'admin'"
+        color="#ff0070"
+        href="/admin/Category"
+      >
+        <v-icon style="color: white">{{
+          'mdi mdi-shield-crown-outline'
+        }}</v-icon>
       </v-btn>
       <v-spacer></v-spacer>
       <v-btn
-        outlined
-        color="#f6f6f6"
-        style="margin-right: 1%;"
+        v-if="data.token == null"
+        color="#ff0070"
+        style="margin-right: 1%; font-weight: bold"
         to="/user/login/Login"
       >
         Login
       </v-btn>
       <v-btn
-        outlined
-        color="white"
+        v-if="!address.id && data.token != null"
+        color="#ff0070"
+        style="margin-right: 1%; font-weight: bold"
+        to="/user/address/PersonalAddress"
       >
-      <v-icon style="color:#f6f6f6" >
-        {{ "mdi-cart" }}
-      </v-icon>
-      </v-btn> 
+        <v-icon>{{ 'mdi mdi-home-plus' }}</v-icon>
+      </v-btn>
+      <v-btn to="/user/cart/Cart" color="#ff0070">
+        <v-icon style="color: white">
+          {{ 'mdi-cart' }}
+        </v-icon>
+      </v-btn>
     </v-app-bar>
-    <v-main style="background-color: #f6f6f6;">
+    <v-main style="background-color: #f6f6f6">
       <v-container>
         <Nuxt />
       </v-container>
     </v-main>
-    <v-footer style="background-color: #7c4dff;" :absolute="!fixed" app>
+    <v-footer style="background-color: #7c4dff" :absolute="!fixed" app>
       <span>&copy; {{ new Date().getFullYear() }}</span>
     </v-footer>
   </v-app>
@@ -71,26 +111,13 @@ export default {
       clipped: false,
       drawer: false,
       fixed: false,
+      data: {},
+      address: {},
       items: [
         {
           icon: 'mdi mdi-format-letter-spacing-variant',
           title: 'Home',
           to: '/user/home/Home',
-        },
-        {
-          icon: 'mdi mdi-login',
-          title: 'Login',
-          to: '/user/login/Login',
-        },
-        {
-          icon: 'mdi mdi-account-edit',
-          title: 'Meus Dados',
-          to: '/user/data/ShowUserData',
-        },
-        {
-          icon: 'mdi mdi-home-plus',
-          title: 'Meu Endereço',
-          to: '/user/address/ShowUserAddress',
         },
       ],
       miniVariant: false,
@@ -98,6 +125,41 @@ export default {
       rightDrawer: false,
       title: 'Vuetify.js',
     }
+  },
+
+  async created() {
+    await this.getUserByToken()
+    await this.getAdress()
+  },
+
+  methods: {
+    logout() {
+      try {
+        localStorage.setItem('crsStore-api-token', '')
+        location.reload()
+        return this.$router.push({ name: 'user-home-Home' })
+      } catch (error) {
+        return this.$toast.info('Erro.')
+      }
+    },
+
+    async getUserByToken() {
+      try {
+        const response = await this.$api.get('/users/by-token')
+        this.data = response.data
+      } catch (error) {
+        return this.$toast.warning('Ocorreu um erro.')
+      }
+    },
+
+    async getAdress() {
+      try {
+        const response = await this.$api.get('/address/getAll')
+        this.address = response.data[0] || {}
+      } catch (error) {
+        return this.$toast.warning('Ocorreu um erro.')
+      }
+    },
   },
 }
 </script>

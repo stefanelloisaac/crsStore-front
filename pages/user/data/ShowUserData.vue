@@ -1,3 +1,5 @@
+<!-- eslint-disable vue/v-slot-style -->
+<!-- eslint-disable vue/valid-v-slot -->
 <!-- eslint-disable vue/attributes-order -->
 <template>
   <v-container
@@ -11,15 +13,15 @@
     "
     class="elevation-20 rounded-xl"
   >
-    <h1 style="text-align: center; padding-top: 3vh">
-      Meus dados <span class="mdi mdi-robot-outline"></span>
+    <h1 class="titulo1" style="text-align: center; padding-top: 3vh; color: white; font-size: 45px;">
+      meu<span class="titulo2">cadastro</span> <span class="mdi mdi-robot-outline"></span>
     </h1>
     <v-form style="padding-top: 4vh" v-model="valid">
       <v-container>
         <v-row class="d-flex justify-center alignt-center">
           <v-col cols="10">
             <v-text-field
-              v-model="users.username"
+              v-model="data.username"
               class="text-input-blue"
               light
               placeholder="Username"
@@ -29,49 +31,15 @@
               rounded
               prepend-icon="mdi-account-outline"
               dense
+              disabled
               background-color="#B9F6CA"
-              :rules="[rule.password]"
-            />
-          </v-col>
-        </v-row>
-        <v-row class="d-flex justify-center alignt-center">
-          <v-col cols="5">
-            <v-text-field
-              v-model="users.password"
-              class="text-input-blue"
-              light
-              placeholder="Digite sua senha"
-              color="#00897B"
-              label="Digite sua senha"
-              filled
-              prepend-icon="mdi-lock-outline"
-              rounded
-              dense
-              background-color="#B9F6CA"
-              :rules="[rule.password]"
-            />
-          </v-col>
-          <v-col cols="5">
-            <v-text-field
-              v-model="users.password2"
-              class="text-input-blue"
-              placeholder="Confirme sua senha"
-              color="#00897B"
-              label="Confirme sua senha"
-              filled
-              prepend-icon="mdi-lock-check-outline"
-              light
-              rounded
-              dense
-              background-color="#B9F6CA"
-              :rules="[rule.password, rule.equalPassword]"
             />
           </v-col>
         </v-row>
         <v-row class="d-flex justify-center alignt-center">
           <v-col cols="10">
             <v-text-field
-              v-model="users.name"
+              v-model="data.name"
               class="text-input-blue"
               placeholder="Nome completo"
               color="#00897B"
@@ -81,15 +49,15 @@
               prepend-icon="mdi-account-plus-outline"
               rounded
               dense
+              disabled
               background-color="#B9F6CA"
-              :rules="[rule.password]"
             />
           </v-col>
         </v-row>
         <v-row class="d-flex justify-center alignt-center">
           <v-col cols="4">
             <v-text-field
-              v-model="users.cpf"
+              v-model="data.cpf"
               class="text-input-blue"
               v-mask="['###.###.###-##']"
               placeholder="CPF"
@@ -100,14 +68,14 @@
               prepend-icon="mdi-id-card"
               light
               dense
+              disabled
               background-color="#B9F6CA"
-              :rules="[rule.password]"
             />
           </v-col>
           <v-col cols="6">
             <v-text-field
               class="text-input-blue"
-              v-model="users.email"
+              v-model="data.email"
               placeholder="Email"
               color="#00897B"
               label="Email"
@@ -116,15 +84,15 @@
               prepend-icon="mdi-email-outline"
               light
               dense
+              disabled
               background-color="#B9F6CA"
-              :rules="[rule.password]"
             />
           </v-col>
         </v-row>
         <v-row class="d-flex justify-center alignt-center">
           <v-col cols="4">
             <v-text-field
-              v-model="users.phone"
+              v-model="data.phone"
               class="text-input-blue"
               placeholder="Telefone"
               color="#00897B"
@@ -133,16 +101,16 @@
               v-mask="['(##) ####-####', '(##) #####-####']"
               rounded
               light
+              disabled
               prepend-icon="mdi-cellphone"
               dense
               background-color="#B9F6CA"
-              :rules="[rule.password]"
             />
           </v-col>
           <v-col cols="6">
             <v-autocomplete
               class="text-input-blue"
-              v-model="users.role"
+              v-model="data.role"
               placeholder="Cargo"
               color="#00897B"
               label="Cargo"
@@ -153,105 +121,197 @@
               item-value="value"
               rounded
               light
-              clearable
               dense
+              disabled
               background-color="#B9F6CA"
-              :rules="[rule.password]"
             />
           </v-col>
         </v-row>
       </v-container>
     </v-form>
-    <v-row
-      class="d-flex justify-center align-center"
-      style="padding-bottom: 15px; margin-top: 2vh"
-    >
-      <v-btn
-        light
-        x-large
-        style="margin-right: 2%"
-        @click="persistir"
-        color="#FFECB3"
+      <v-row
+      
+        style="margin-left: 2vw ;padding-bottom: 2vh; margin-top: 2vh"
       >
-        REGISTRAR
-      </v-btn>
-      <v-btn
-        light
-        x-large
-        style="margin-left: 2%"
-        to="/public/user/users"
-        color="#EF9A9A"
-      >
-        Cancelar
-      </v-btn>
-    </v-row>
+        <v-btn
+          id="editbtn"
+          elevation="8"
+          dark
+          x-large
+          style="font-weight: bold;"
+          color="#ff0070"
+          @click="update(data)"
+        >
+          Edit
+        </v-btn>
+      </v-row>
+    <v-dialog v-model="dialog" max-width="800px" transition="dialog-top-transition">
+      <v-card style="padding: 15px; font-family: 'Courier New', Courier, monospace;" color="purple darken-4">
+        <v-card-title class="d-flex justify-center align-center"> Edite seus dados </v-card-title>
+        <v-card-content style="padding: 15px;">
+          <v-row class="d-flex justify-center align-center">
+            <v-col cols="10">
+              <v-text-field
+                class="text-input-green"
+                v-model="data.username"
+                outlined
+                background-color="purple darken-3"
+                color="#69F0AE"
+                placeholder="Username"
+                label="Username"
+              >
+              </v-text-field>
+            </v-col>
+          </v-row>
+          <v-row class="d-flex justify-center align-center">
+            <v-col cols="10">
+              <v-text-field
+                class="text-input-green"
+                v-model="data.name"
+                outlined
+                background-color="purple darken-3"
+                color="#69F0AE"
+                placeholder="Nome do Usuário"
+                label="Nome do Usuário"
+              >
+              </v-text-field>
+            </v-col>
+          </v-row>
+          <v-row class="d-flex justify-center align-center">
+            <v-col cols="5">
+              <v-text-field
+                class="text-input-green"
+                v-model="data.cpf"
+                v-mask="'###.###.###-##'"
+                outlined
+                background-color="purple darken-3"
+                color="#69F0AE"
+                placeholder="CPF"
+                label="CPF"
+              >
+              </v-text-field>
+            </v-col>
+            <v-col cols="5">
+              <v-text-field
+                class="text-input-green"
+                v-model="data.email"
+                outlined
+                background-color="purple darken-3"
+                color="#69F0AE"
+                placeholder="Email do Usuário"
+                label="Email do Usuário"
+              >
+              </v-text-field>
+            </v-col>
+          </v-row>
+          <v-row class="d-flex justify-center align-center">
+            <v-col cols="5">
+                <v-text-field
+                  class="text-input-green"
+                  v-model="data.phone"
+                  v-mask="['(##) ####-####', '(##) #####-####']"
+                  outlined
+                  background-color="purple darken-3"
+                  color="#69F0AE"
+                  placeholder="Telefone para contato"
+                  label="Telefone para contato"
+                >
+                </v-text-field>
+            </v-col>
+            <v-col cols="5">
+                <v-autocomplete
+                  class="text-input-green"
+                  v-model="data.role"
+                  outlined
+                  background-color="purple darken-3"
+                  color="#69F0AE"
+                  placeholder="Acesso"
+                  label="Acesso"
+                  :items="roles"
+                  item-text="name"
+                  item-value="value"
+                >
+                </v-autocomplete>
+            </v-col>
+          </v-row>
+        </v-card-content>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn style="font-weight: bold;" dark color="#ff0070" large @click="persist"> Salvar </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-container>
 </template>
 
 <script>
 export default {
-  name: 'Users',
+  name: 'UserShow',
   layout: 'UserLayout',
 
   data() {
     return {
       valid: false,
-      users: {
-        id: null,
-        username: null,
-        cpf: null,
-        passwordHash: null,
-        role: null,
-        name: null,
-        phone: null,
-        email: null,
-        password: null,
-        password2: null,
-      },
-      rule:{
-        password: v => !!v || 'Esse campo é obrigatorio',
-        equalPassword: v => v === this.users.password || 'Senha diferente!'
-      },
-      roles: [{"name": "Cliente", "value": "customer"}, {"name": "Entregador", "value": "deliver"}]
+      dialog: false,
+      data: {},
+      roles: [
+        { name: 'Cliente', value: 'customer' },
+        { name: 'Entregador', value: 'deliver' },
+      ],
     }
   },
 
-  created() {
-    if (this.$route?.params?.id) {
-      this.getById(this.$route.params.id)
-    }
+  async created() {
+    await this.getUserByToken()
   },
 
   methods: {
-    async persistir() {
+    update(item) {
+      this.data.username = item.username
+      this.data.cpf = item.cpf
+      this.data.name = item.name
+      this.data.phone = item.phone
+      this.data.role = item.role
+      this.data.email = item.email
+      this.dialog = true
+    },
+
+    async getUserByToken() {
       try {
-        const users = {
-          username: this.users.username,
-          cpf: this.users.cpf,
-          name: this.users.name,
-          phone: this.users.phone,
-          passwordHash: this.users.passwordHash,
-          role: this.users.role,
-          email: this.users.email,
-        }
-
-        if (!this.users.id) {
-          await this.$api.$post('/users', users)
-          this.$router.push('/public/user/users')
-          return this.$toast.success(`Endereço cadastrado com sucesso!`)
-        }
-
-        await this.$api.$post(`/users/${this.users.id}`, users)
-        this.$router.push('/public/user/users')
-        this.$toast.success('Cadastro atualizado com sucesso!')
+        const response = await this.$api.get('/users/by-token')
+        this.data = response.data
       } catch (error) {
-        this.$toast.error('Ocorreu um erro ao realizar o cadastro!')
+        return this.$toast.warning('Ocorreu um erro.')
       }
     },
-    async getById(id) {
-      const users = await this.$api.$get(`/users/${id}`)
-      this.users = users.data
+
+    async persist() {
+      try {
+        const request = {
+          username: this.data.username,
+          cpf: this.data.cpf,
+          name: this.data.name,
+          phone: this.data.phone,
+          role: this.data.role,
+          email: this.data.email,
+        }
+        
+        await this.$api.patch(`/users/${this.id}`, request);
+        this.$toast.success('Dado editado com êxito.');
+        
+        this.username = null
+        this.cpf = null
+        this.name = null
+        this.phone = null
+        this.role = null
+        this.email = null
+        this.dialog = false
+        await this.getUserByToken()
+      } catch (error) {
+        return this.$toast.warning('Ocorreu um erro.')
+      }
     },
+
   },
 }
 </script>
@@ -259,5 +319,26 @@ export default {
 <style>
 .text-input-blue .v-text-field__slot input {
   color: #4a148c !important;
+}
+
+.text-input-green .v-text-field__slot input {
+  color: #f6f6f6 !important;
+  font-weight: bold;
+}
+
+.editbtn:disabled {
+  cursor: not-allowed;
+  background-color: red;
+  opacity: 0.1;
+}
+
+.titulo1 {
+  text-shadow: -2px 1px #311B92;
+  font-weight: 100;
+}
+
+.titulo2 {
+  text-shadow: -2px 1px #311B92;
+  font-weight: 900;
 }
 </style>

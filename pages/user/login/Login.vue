@@ -155,7 +155,7 @@
 <script>
 export default {
   name: 'Users',
-  layout: 'UserLayout',
+  layout: 'LoginLayout',
 
   data() {
     return {
@@ -181,7 +181,7 @@ export default {
         if(response.type === "success"){
           localStorage.setItem("crsStore-api-token", response.data.token)
           this.$toast.success("Você está logado!")
-          this.$router.push("/")
+          this.$router.push("/user/home/Home")
         }else{
           this.$toast.error(response.data.message)
         }
